@@ -145,6 +145,19 @@ curl -X POST http://localhost:8000/ask-code \
 
 ---
 
+## Design Decisions
+
+### Why chunk by lines?
+Code files vary in length and structure. Fixed line chunking ensures consistent embedding size while preserving local context.
+
+### Why pgvector instead of Pinecone?
+Using PostgreSQL keeps infrastructure simple and demonstrates self-hosted vector search.
+
+### Why MiniLM embeddings?
+MiniLM provides fast local embeddings (384-dim) with good semantic accuracy.
+
+---
+
 ## Future Improvements
 
 - **Function-aware chunking** — split on `def`/`class` boundaries instead of fixed line count
