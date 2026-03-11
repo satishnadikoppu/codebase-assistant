@@ -4,17 +4,20 @@ from git import Repo
 import psycopg2
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CLONE_DIR = "../cloned_repo"
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 conn = psycopg2.connect(
-    dbname="ragdb",
-    user="postgres",
-    password="postgres",
-    host="localhost",
-    port="5432"
+    dbname=os.getenv("POSTGRES_DB", "ragdb"),
+    user=os.getenv("POSTGRES_USER", "postgres"),
+    password=os.getenv("POSTGRES_PASSWORD", "postgres"),
+    host=os.getenv("POSTGRES_HOST", "localhost"),
+    port=os.getenv("POSTGRES_PORT", "5432")
 )
 
 register_vector(conn)

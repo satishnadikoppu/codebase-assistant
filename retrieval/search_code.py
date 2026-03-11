@@ -12,11 +12,11 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 conn = psycopg2.connect(
-    dbname="ragdb",
-    user="postgres",
-    password="postgres",
-    host="localhost",
-    port="5432"
+    dbname=os.getenv("POSTGRES_DB", "ragdb"),
+    user=os.getenv("POSTGRES_USER", "postgres"),
+    password=os.getenv("POSTGRES_PASSWORD", "postgres"),
+    host=os.getenv("POSTGRES_HOST", "localhost"),
+    port=os.getenv("POSTGRES_PORT", "5432")
 )
 
 register_vector(conn)
