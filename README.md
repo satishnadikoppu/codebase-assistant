@@ -17,14 +17,41 @@ Codebase Assistant indexes a GitHub repository into a vector database and uses s
 ## Architecture
 
 ```mermaid
-flowchart LR
-    A([GitHub Repo]) --> B[repo_indexer\nClone → Scan → Chunk → Embed]
+flowchart TD
+    A([GitHub Repo]) --> B[repo_indexer / ingest_repo.py\nClone → Scan → Chunk → Embed → Store]
     B --> C[(PostgreSQL + pgvector\n384-dim embeddings)]
-    D([User Question]) --> E[retrieval/search_code\nEmbed → Vector Search → Re-rank]
+    D([User Question]) --> E[retrieval / search_code.py\nEmbed → Vector Search → Re-rank]
     C --> E
     E --> F[LLM\ngpt-4o-mini]
-    F --> G[api/app.py\nPOST /ask-code]
+    F --> G[api / app.py\nPOST /ask-code]
     G --> H([Answer + Sources])
+```
+
+```
+GitHub Repo
+     │
+     ▼
+┌─────────────────┐
+│  repo_indexer/  │  Clone → Scan → Chunk → Embed → Store
+│  ingest_repo.py │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│   PostgreSQL    │  pgvector stores 384-dim embeddings
+│  (code_chunks)  │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  retrieval/     │  Query → Embed → Vector Search → Re-rank → LLM
+│  search_code.py │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│   api/app.py    │  POST /ask-code  →  JSON response
+└─────────────────┘
 ```
 
 ---
