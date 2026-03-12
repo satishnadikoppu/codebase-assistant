@@ -16,17 +16,6 @@ Codebase Assistant indexes a GitHub repository into a vector database and uses s
 
 ## Architecture
 
-```mermaid
-flowchart TD
-    A([GitHub Repo]) --> B[repo_indexer / ingest_repo.py\nClone → Scan → Chunk → Embed → Store]
-    B --> C[(PostgreSQL + pgvector\n384-dim embeddings)]
-    D([User Question]) --> E[retrieval / search_code.py\nEmbed → Vector Search → Re-rank]
-    C --> E
-    E --> F[LLM\ngpt-4o-mini]
-    F --> G[api / app.py\nPOST /ask-code]
-    G --> H([Answer + Sources])
-```
-
 ```
 GitHub Repo
      │
